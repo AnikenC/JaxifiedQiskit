@@ -1,0 +1,9 @@
+matplotlib
+pylatexenc
+qiskit
+qiskit-dynamics[jax]
+sympy2jax
+jax==0.4.9
+jaxlib==0.4.9
+ml_dtypes==0.2.0
+chex
