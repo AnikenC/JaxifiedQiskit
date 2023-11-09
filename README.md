@@ -15,3 +15,7 @@ To get faster, some tricks are:
 5. Use jitted and vmapped simulations across large batches to reduce sim durations by orders of magnitude
 6. Disable parameter checks upon Pulse instantiation (or remove the constraints from the source code) to allow for easy jitting
 7. Keep t_span as low as possible (reduce any unnecessary extra simulation time)
+
+NOTEBOOKS:
+Espresso -> Cappucino -> Macchiato -> Americano
+Americano contains the latest files
