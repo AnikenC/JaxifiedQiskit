@@ -13,7 +13,7 @@ import chex
 from typing import Optional, Union
 
 
-def PauliToQuditMatrix(inp_str: str, qudit_dim_size: Optional[int] = 4):
+def PauliToQuditOperator(inp_str: str, qudit_dim_size: Optional[int] = 4):
     word_list = list(inp_str)
     qudit_op_list = []
     for word in word_list:

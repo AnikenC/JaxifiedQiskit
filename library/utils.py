@@ -20,7 +20,7 @@ base_gates_dict = {
 }
 
 
-def PauliToQuditMatrix(inp_str: str, qudit_dim_size: Optional[int] = 4):
+def PauliToQuditOperator(inp_str: str, qudit_dim_size: Optional[int] = 4):
     """
     This function operates very similarly to SparsePauliOp from Qiskit, except this can produce
     arbitrary dimension qudit operators that are the equivalent of the Qubit Operators desired.
