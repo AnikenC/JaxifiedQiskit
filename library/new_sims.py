@@ -17,7 +17,16 @@ from library.utils import PauliToQuditOperator
 
 class JaxedSolver:
     def __init__(
-        self, schedule_func, solver, dt, carrier_freqs, ham_chans, t_span, rtol, atol
+        self,
+        schedule_func,
+        solver,
+        dt,
+        carrier_freqs,
+        ham_chans,
+        ham_ops,
+        t_span,
+        rtol,
+        atol,
     ):
         super().__init__()
         self.schedule_func = schedule_func
@@ -25,6 +34,7 @@ class JaxedSolver:
         self.dt = dt
         self.carrier_freqs = carrier_freqs
         self.ham_chans = ham_chans
+        self.ham_ops = ham_ops
         self.t_span = t_span
         self.rtol = rtol
         self.atol = atol

@@ -44,14 +44,34 @@ def PauliToQuditOperator(inp_str: str, qudit_dim_size: Optional[int] = 4):
 
 
 class TwoQuditHamiltonian:
+    """
+    Custom Two Coupled Qudit Hamiltonian for Qiskit Dynamics Testing.
+
+    Important Attributes include:\n
+    dt\n
+    solver\n
+    ham_ops\n
+    ham_chans\n
+    chan_freqs
+    """
+
     def __init__(
         self,
-        qudit_dim,
+        qudit_dim: int,
+        dt: Optional[float] = 1 / 4.5e9,
     ):
         super().__init__()
 
-        self.qudit_dim = qudit_dim
+        if not isinstance(dt, float):
+            raise ValueError("dt needs to be a float")
+        if not isinstance(qudit_dim, int):
+            raise ValueError("qudit_dim needs to be an int")
 
+        self.dt = dt
+        self.dim = qudit_dim
+        self.solver = self.make_solver()
+
+    def make_solver(self):
         v0 = 4.86e9
         anharm0 = -0.32e9
         r0 = 0.22e9
@@ -62,12 +82,12 @@ class TwoQuditHamiltonian:
 
         J = 0.002e9
 
-        a = np.diag(np.sqrt(np.arange(1, qudit_dim)), 1)
-        adag = np.diag(np.sqrt(np.arange(1, qudit_dim)), -1)
-        N = np.diag(np.arange(qudit_dim))
+        a = np.diag(np.sqrt(np.arange(1, self.dim)), 1)
+        adag = np.diag(np.sqrt(np.arange(1, self.dim)), -1)
+        N = np.diag(np.arange(self.dim))
 
-        ident = np.eye(qudit_dim, dtype=complex)
-        full_ident = np.eye(qudit_dim**2, dtype=complex)
+        ident = np.eye(self.dim, dtype=complex)
+        full_ident = np.eye(self.dim**2, dtype=complex)
 
         N0 = np.kron(ident, N)
         N1 = np.kron(N, ident)
@@ -88,17 +108,15 @@ class TwoQuditHamiltonian:
         drive_op0 = 2 * np.pi * r0 * (a0 + a0dag)
         drive_op1 = 2 * np.pi * r1 * (a1 + a1dag)
 
-        dt = 1 / 4.5e9
+        self.ham_ops = [drive_op0, drive_op1, drive_op0, drive_op1]
+        self.ham_chans = ["d0", "d1", "u0", "u1"]
+        self.chan_freqs = {"d0": v0, "d1": v1, "u0": v1, "u1": v0}
 
-        ham_ops = [drive_op0, drive_op1, drive_op0, drive_op1]
-        ham_chans = ["d0", "d1", "u0", "u1"]
-        chan_freqs = {"d0": v0, "d1": v1, "u0": v1, "u1": v0}
-
-        self.solver = Solver(
+        return Solver(
             static_hamiltonian=static_ham_full,
-            hamiltonian_operators=ham_ops,
+            hamiltonian_operators=self.ham_ops,
             rotating_frame=static_ham_full,
-            hamiltonian_channels=ham_chans,
-            channel_carrier_freqs=chan_freqs,
-            dt=dt,
+            hamiltonian_channels=self.ham_chans,
+            channel_carrier_freqs=self.chan_freqs,
+            dt=self.dt,
         )
