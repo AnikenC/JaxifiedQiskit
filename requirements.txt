@@ -16,3 +16,4 @@ qiskit_ibm_runtime
 qiskit_terra
 tqdm
 gymnasium
+qiskit-ibmq-provider
