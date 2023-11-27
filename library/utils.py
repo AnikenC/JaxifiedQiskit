@@ -12,11 +12,16 @@ import chex
 
 from typing import Optional, Union
 
+I = jnp.array([[1.0, 0.0], [0.0, 1.0]])
+H = 1 / jnp.sqrt(2) * jnp.array([[1.0, 1.0], [1.0, -1.0]])
+S = jnp.array([[1.0, 0.0], [0.0, 1.0j]])
+SH = S.conj().T @ H
+
 base_gates_dict = {
-    "I": jnp.array([[1.0, 0.0], [0.0, 1.0]]),
-    "X": jnp.array([[0.0, 1.0], [1.0, 0.0]]),
-    "Y": jnp.array([[0.0, -1.0j], [1.0j, 0.0]]),
-    "Z": jnp.array([[1.0, 0.0], [0.0, -1.0]]),
+    "I": I,
+    "X": H,
+    "Y": SH,
+    "Z": I,
 }
 
 
