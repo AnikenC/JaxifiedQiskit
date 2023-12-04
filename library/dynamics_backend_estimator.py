@@ -231,6 +231,15 @@ class DynamicsBackendEstimator(BaseEstimator[PrimitiveJob[EstimatorResult]]):
                 transpiled_circuits.append(transpiled_circuit_copy)
             self._transpiled_circuits += transpiled_circuits
 
+    def _call_analysis(
+        self,
+        circuits,
+        observables,
+        parameter_values,
+        **run_options
+    ) -> EstimatorResult:
+        # Transpile
+
     def _call(
         self,
         circuits: Sequence[int],
@@ -308,6 +317,34 @@ class DynamicsBackendEstimator(BaseEstimator[PrimitiveJob[EstimatorResult]]):
         # the first qubit.
         # Although such an operator can be optimized out by interpreting it as a constant (1),
         # this optimization requires changes in various methods. So it is left as future work.
+
+        qubit_indices = np.arange(pauli.num_qubits)[pauli.z | pauli.x]
+        if not np.any(qubit_indices):
+            qubit_indices = [0]
+        meas_circuit = QuantumCircuit(
+            QuantumRegister(num_qubits, "q"),
+            ClassicalRegister(len(qubit_indices), f"__c_{pauli}"),
+        )
+        for clbit, i in enumerate(qubit_indices):
+            if pauli.x[i]:
+                if pauli.z[i]:
+                    meas_circuit.sdg(i)
+                meas_circuit.h(i)
+            meas_circuit.measure(i, clbit)
+        return meas_circuit, qubit_indices
+
+    @staticmethod
+    def _jaxed_measurement_circuit(num_qubits: int, pauli: Pauli):
+        # Note: if pauli is I for all qubits, this function generates a circuit to measure only
+        # the first qubit.
+        # Although such an operator can be optimized out by interpreting it as a constant (1),
+        # this optimization requires changes in various methods. So it is left as future work.
+
+        ### MODIFICATIONS
+        # Now paulis get processed to a
+
+        ### MODIFICATIONS
+
         qubit_indices = np.arange(pauli.num_qubits)[pauli.z | pauli.x]
         if not np.any(qubit_indices):
             qubit_indices = [0]
