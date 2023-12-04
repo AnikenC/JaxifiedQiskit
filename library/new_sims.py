@@ -15,6 +15,13 @@ from typing import Optional, Union
 from library.utils import PauliToQuditOperator
 
 
+class JaxedDynamicsBackend:
+    def __init__(
+        self,
+    ):
+        super().__init__()
+
+
 class JaxedSolver:
     def __init__(
         self,

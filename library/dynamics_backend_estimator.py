@@ -232,13 +232,11 @@ class DynamicsBackendEstimator(BaseEstimator[PrimitiveJob[EstimatorResult]]):
             self._transpiled_circuits += transpiled_circuits
 
     def _call_analysis(
-        self,
-        circuits,
-        observables,
-        parameter_values,
-        **run_options
+        self, circuits, observables, parameter_values, **run_options
     ) -> EstimatorResult:
-        # Transpile
+        pass
+
+    #    # Transpile
 
     def _call(
         self,
